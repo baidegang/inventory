@@ -15,7 +15,7 @@ public class DbUtil {
 	public Connection getDbConnection() {
 		Connection conn = null;
 		try {
-		
+			System.out.println(11111);
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys?serverTimezone=JST", "root",
 					"password");

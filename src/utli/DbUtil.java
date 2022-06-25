@@ -108,6 +108,8 @@ public class DbUtil {
 			ResultSet rset = stmt.executeQuery("select id,name,sex,age,classid from tbl_student"
 					+ " where classid="+ classid );
 		
+			
+			System.out.println(2222);
 			while(rset.next()) {
 				Student student = new Student();
 				student.setId(rset.getInt("id"));

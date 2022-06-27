@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+html {
+    text-align: center;
+}
+
+
+
+table th,
+table td {
+    padding: 10px 0;
+    text-align: center;
+}
+
+table tr:nth-child(even) {
+    background-color: #eee
+}
+
+.inputdata {
+    width: 50%;
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.inputdata th {
+    background-color: rgb(203, 234, 207);
+}
+
+.stockdata {
+    width: 30%;
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+#number {
+	text-align:center;
+    padding: 5px;
+    width: 50px;
+}
+
+
+#quantity{
+	text-align:center;
+    background-color: #eee;
+    width:50px;
+    border: none;
+    opacity:1;
+    color: black;
+    -webkit-appearance: none;
+ 	-moz-appearance: none;
+  	appearance: none;
+}

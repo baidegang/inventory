@@ -9,16 +9,18 @@
 </head>
 <body>
 <h1>入庫完了</h1>
-
+<!-- 在庫履歴遷移 -->
 	<form>
 		<div class="r_submit">
 			<input type="submit" value="在庫履歴へ">
 		</div>
 	</form>
-	<form>
+	
+<!-- 入庫登録遷移 -->
+	<form action="IndexAction">
 		<div class="r_submit">
-			<button type="button" onclick="history.back()">戻る</button>
-		</div>	
+			<input type="submit" value="もどる"/>
+		</div>
 	</form>
 </body>
 </html>

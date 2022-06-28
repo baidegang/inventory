@@ -9,10 +9,7 @@
         <action name="IndexAction" class="record.IndexAction" method="execute">
             <result name="success">receive/receive.jsp</result>
         </action>
-        <action name="decide" class="record.DecideAction" method="execute">
-            <result name="success">/receive/success.jsp</result>
-            <result name="IndexAction" type="chain">IndexAction</result>
-        </action>
+
         <action name="register" class="record.RegisterAction" method="execute">
             <result name="success">/receive/success.jsp</result>
             <result name="IndexAction" type="chain">IndexAction</result>

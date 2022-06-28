@@ -10,9 +10,10 @@ import model.DataStock;
 public class IssueAction {
 	
 	private int id;
+	private int quantity;
 	private int shipMounts;
 	private String name;
-	private Date date;
+	private String date;
 	
 	private List<Product> list;
 	
@@ -23,6 +24,36 @@ public class IssueAction {
 		ProductDAO proDAO = new ProductDAO();
 		
 		setList(proDAO.selectAll());
+		
+		return "success";
+	}
+	
+	
+	public String preinputData() {
+		ProductDAO proDAO = new ProductDAO();
+		DataStock dataStock = new DataStock();
+			
+			
+		try {
+			Date sqlDate = Date.valueOf(date);
+			setList(proDAO.selectAll());
+			dataStock.setId(id);
+			dataStock.setName(name);
+			dataStock.setShipMounts(shipMounts);
+			dataStock.setDate(sqlDate);
+			
+			duaList.add(dataStock);
+		} catch (NullPointerException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+
+			System.out.println(id+","+name+","+shipMounts + "," + date);
+		}
 		
 		return "success";
 	}
@@ -97,7 +128,7 @@ public class IssueAction {
 
 
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
@@ -107,7 +138,7 @@ public class IssueAction {
 
 
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -129,6 +160,16 @@ public class IssueAction {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 	
 	

@@ -46,7 +46,7 @@ public class DbUtil implements Serializable  {
 		try {
 			Connection conn = getDbConnection();
 			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select * from product");
+			ResultSet rset = stmt.executeQuery("select * from product where is_delete = 0");
 		
 			while(rset.next()) {
 				Product product = new Product();

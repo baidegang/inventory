@@ -39,12 +39,14 @@ function register(){
 	    };
 	    swal(options).then(function(value){
 	        if(value){
-	            //表示するを選んだ場合の処理
+	            //登録するを選んだ場合の処理
 	            coladd(item,number,today,note,item0);
 	        }
 	    });
 	}
 }
+
+//一時登録用リストへの追加
 function coladd(item,number,today,note,item0) {
 	var table = document.getElementById("table");
     var row = table.insertRow(-1);

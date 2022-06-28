@@ -4,7 +4,7 @@ public class Product {
 	private int id;
 	private String name;
 	private Inventory inventory;
-	
+	private int is_delete;
 	
 	public int getId() {
 		return id;
@@ -23,6 +23,12 @@ public class Product {
 	}
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
+	}
+	public int getIs_delete() {
+		return is_delete;
+	}
+	public void setIs_delete(int is_delete) {
+		this.is_delete = is_delete;
 	}
 	
 	

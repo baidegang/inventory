@@ -3,30 +3,51 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-
     <package name="default" extends="struts-default">
-        <!-- Hello worldのサンプルアクション -->
-        <action name="hello" class="sample.HelloWorldAction" method="execute">
-            <result name="success">/view/sample/HelloWorld.jsp</result>
+    
+    	<!-- ログインアクション -->
+        <action name="login" class="product.LoginAction" method="execute">
+            <result name="success">/view/zaiko_kanri/zaiko_top.jsp</result>
             <result name="error">index.jsp</result>
-            <result name ="students">/view/sample/students.jsp</result>
-            <result name="error">index.jsp</result>
+            <result name="input">index.jsp</result>
+        </action>
+
+        <!-- ログアウトアクション -->
+        <action name="logout" class="product.LogoutAction" method="execute">
+        	<result name="success">index.jsp</result>
         </action>
         
-         <action name ="hello4" class="sample.HelloWorldAction" method="update">
-        	<result name="success">/view/sample/HelloWorld.jsp</result>
-        	 <result name="error">index.jsp</result>
-             <result name ="xxxxx">/view/sample/students.jsp</result>
+        <!-- 登録アクション -->
+        <action name="registPage" class="product.RegistAction" method="init">
+        	<result name="success">/view/zaiko_kanri/zaiko_regist.jsp</result>
+        </action>
+        <action name="regist" class="product.RegistAction" method="execute">
+        	<result name="success">/view/zaiko_kanri/zaiko_regist.jsp</result>
+        	<result name="error">/view/zaiko_kanri/zaiko_regist.jsp</result>
+            <result name="input">/view/zaiko_kanri/zaiko_regist.jsp</result>
         </action>
         
-        <action name="hello1" class="sample.HelloWorldAction" method="insert">
-        	<result name="success">/view/sample/HelloWorld.jsp</result>
-        	 <result name="error">index.jsp</result>
-        	 </action>
-        	 
-        	 <action name="hello2" class="sample.HelloWorldAction" method="delete">
-        	<result name="success">/view/sample/HelloWorld.jsp</result>
-        	 <result name="error">index.jsp</result>
-        	 </action>
+        <!-- 更新アクション -->
+        <action name="updateList" class="product.ListAction" method="execute">
+        	<result name="success">/view/zaiko_kanri/zaiko_update.jsp</result>
+        	<result name="error">/view/zaiko_kanri/zaiko_update.jsp</result>
+        </action>
+        
+        <action name="update" class="product.UpdateAction" method="execute">
+        	<result name="success">/view/zaiko_kanri/zaiko_update.jsp</result>
+        	<result name="error">/view/zaiko_kanri/zaiko_update.jsp</result>
+        </action>
+        
+        <!-- 削除アクション -->
+        <action name="deleteList" class="product.ListAction" method="execute">
+        	<result name="success">/view/zaiko_kanri/zaiko_delete.jsp</result>
+        	<result name="error">/view/zaiko_kanri/zaiko_delete.jsp</result>
+        </action>
+        
+        <action name="delete" class="product.DeleteAction" method="execute">
+        	<result name="success">/view/zaiko_kanri/zaiko_delete.jsp</result>
+        	<result name="error">/view/zaiko_kanri/zaiko_delete.jsp</result>
+        </action>
+        
     </package>
 </struts>

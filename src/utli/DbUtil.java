@@ -4,169 +4,147 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import entity.Student;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DbUtil {
 	
-	
+	static final String URL = "jdbc:mysql://localhost:3306/zaiko_kanri?serverTimezone=JST";
+	static final String user = "root";
+	static final String password = "password";
+
 	public Connection getDbConnection() {
 		Connection conn = null;
 		try {
-			System.out.println(11111);
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys?serverTimezone=JST", "root",
-					"password");
-
+			// sys?のところがtest?かもしれない, "root", "パスワード"
+			conn = DriverManager.getConnection(URL,user, password);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return conn;
 	}
 	
-	public String getStudentName(int Studentid) {
-	 String studentName = null;
-		try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select id,name,sex from student where id="+ Studentid );		
-
-			if(rset.next()) {
-				studentName = rset.getString("name");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return studentName;
-	}
-
-	public Student getStudent(int Studentid) {
-		 Student student = null;
+	// 商品を登録
+	public int insertProduct(String name,String note, String userName) {
+		System.out.println("insert query:" + userName);
+		 int ret = 0;
 			try {
 				Connection conn = getDbConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rset = stmt.executeQuery("select id,name,sex,age,classid from tbl_student where id="+ Studentid );		
-				if(rset.next()) {
-					student = new Student();
-					student.setId(rset.getInt("id"));
-					student.setName(rset.getString("name"));
-					student.setSex(rset.getString("sex"));
-					student.setAge(rset.getInt("age"));
-					student.setClassid(rset.getInt("classid"));
-				}
+				ret = stmt.executeUpdate(
+						"insert into product(name,note,create_user,last_update_user)"
+						+ "values('" + name + "','" + note + "','" + userName + "','" + userName + "')");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return student;
+			// 成功すれば1が返る
+			return ret;
 		}
-
-	public int updateStudentById(int Studentid,int age,String name,String sex,int classid ) {
-		 int ret=0;
-		 try {
+	
+	// 全Product情報を取得 zaiko_updateで利用
+	public Map<Integer,String> getMapProducts() {
+		Map<Integer,String> map = new HashMap<Integer,String>();
+		try {
 			Connection conn = getDbConnection();
 			Statement stmt = conn.createStatement();
-			ret= stmt.executeUpdate("update tbl_student set age ="+age+",name='"+name+"',sex='"+sex+"',classid="+classid+" where id="+ Studentid );
-		 }catch (Exception e) {
-			 e.printStackTrace();
-			 
+			ResultSet rset = stmt.executeQuery("select * from product");
+
+			while(rset.next()) {
+//				Product product = new Product();
+				map.put(rset.getInt("id"), rset.getString("name"));
+//				product.setProductName(rset.getString("name"));
+//				product.setNote(rset.getString("note"));
+//				product.setCreateDate(rset.getDate("create_date"));
+//				product.setCreateUser(rset.getString("create_user"));
+//				product.setUpdateDate(rset.getDate("update_date"));
+//				product.setUpdateUser(rset.getString("update_user"));
+//				list.add(product);
+			}
+			System.out.println(map);
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+		return map;
+	}
+	
+	/*
+	 * // 全Product情報を取得 zaiko_updateで利用 public List<String> getListProducts() {
+	 * Map<Integer,String> map = new HashMap<>(); //
+	 * Listを宣言し、valuesメソッドを使用してMapの値を取得する List<String> list = null; try { Connection
+	 * conn = getDbConnection(); Statement stmt = conn.createStatement(); ResultSet
+	 * rset = stmt.executeQuery("select * from product");
+	 * 
+	 * while(rset.next()) { // Product product = new Product();
+	 * map.put(rset.getInt("id"), rset.getString("name")); //
+	 * product.setProductName(rset.getString("name")); //
+	 * product.setNote(rset.getString("note")); //
+	 * product.setCreateDate(rset.getDate("create_date")); //
+	 * product.setCreateUser(rset.getString("create_user")); //
+	 * product.setUpdateDate(rset.getDate("update_date")); //
+	 * product.setUpdateUser(rset.getString("update_user")); // list.add(product); }
+	 * list = new ArrayList<>(map.values()); }catch(Exception e) {
+	 * e.printStackTrace(); } return list; }
+	 * 
+	 * // 全Product情報を取得 zaiko_updateで利用 public List<Product> getProducts() {
+	 * List<Product> list = new ArrayList<Product>(); try { Connection conn =
+	 * getDbConnection(); Statement stmt = conn.createStatement(); ResultSet rset =
+	 * stmt.executeQuery("select * from product");
+	 * 
+	 * while(rset.next()) { Product product = new Product();
+	 * product.setId(rset.getInt("id"));
+	 * product.setProductName(rset.getString("name"));
+	 * product.setNote(rset.getString("note"));
+	 * product.setUpdateUser(rset.getString("update_user")); list.add(product); }
+	 * }catch(Exception e) { e.printStackTrace(); } return list; }
+	 */
+	
+	// 商品情報を更新
+	public int updateProduct(int id, String name, String note, String userName) {
+		System.out.println("update query:" + userName);
+		int ret = 0;
+		String msg = "update product set "
+				+ "name = '" + name + "', note = '" + note
+				+ "', last_update_user = '" + userName
+				+ "' where id = " + id;
+		System.out.println("update引数idの値:" +id);
+		System.out.println(msg);
+		try {
+			Connection conn = getDbConnection();
+			Statement stmt = conn.createStatement();
+			ret= stmt.executeUpdate("update product set "
+					+ "name = '" + name + "', note = '" + note
+					+ "', last_update_user = '" + userName
+					+ "' where id = " + id);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 成功すれば1が返る
 		return ret;
 	}
-	public boolean deleteStudentById(int Studentid) {
-		boolean de = false;
+	
+	// 商品情報を削除（更新）
+	public int deleteProduct(int id, String name, String userName) {
+		System.out.println("delete query:" + userName);
+		int ret = 0;
+		String msg = "update product set "
+				+ "last_update_user = '" + userName
+				+ "', is_delete = " + 1
+				+ " where id = " + id
+				+ " and is_delete = 0";
+		System.out.println("delete引数idの値:" +id);
+		System.out.println(msg);
 		try {
 			Connection conn = getDbConnection();
 			Statement stmt = conn.createStatement();
-			 de= stmt.execute("delete from tbl_student where id="+Studentid);
-			
-		}catch(Exception e) {
+			ret= stmt.executeUpdate("update product set "
+					+ "last_update_user = '" + userName
+					+ "', is_delete = " + 1
+					+ " where id = " + id + " and is_delete = 0");
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return de;
-	}
-	public boolean insertStudent(int id,String name,String sex,int age,int classid) {
-		boolean insert = false;
-		
-			try {
-				Connection conn = getDbConnection();
-				Statement stmt = conn.createStatement();
-			  insert = stmt.execute("insert into tbl_student(id,name,sex,age,classid)values("+id+",'"+name+"','"+sex+"',"+age+","+classid+")");
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-			return insert;
-			
-	}
-	
-	public List<Student>getStudentByClassid(int classid){
-		List<Student>list = new ArrayList<Student>();
-		try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select id,name,sex,age,classid from tbl_student"
-					+ " where classid="+ classid );
-		
-			while(rset.next()) {
-				Student student = new Student();
-				student.setId(rset.getInt("id"));
-			     student.setName(rset.getString("name"));
-			     student.setSex(rset.getString("sex"));
-			     student.setAge(rset.getInt("age"));
-			     student.setClassid(rset.getInt("classid"));
-			     list.add(student);
-			}
-					
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-			return list;
-	}
-	public Student getStudent(String studentName, String password) {
-		Student student = null;
-		try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery("select id,name,sex,age,classid from tbl_student where name='" + studentName + "' and password='" + password + "'");
-            if(rset.next()) {
-            	student = new Student();
-            	student.setId(rset.getInt("id"));
-            	student.setName(rset.getString("name"));
-            	student.setSex(rset.getString("sex"));
-            	student.setAge(rset.getInt("age"));
-            	student.setClassid(rset.getInt("classid"));
-            }
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return student;
-	}
-
-
-	
-	
-	
-	public List<Student> getStudents(String p) {
-		List<Student>list = new ArrayList<Student>();
-		try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select id,name,sex,age,classid from tbl_student"
-					+p );
-		
-			while(rset.next()) {
-				Student student = new Student();
-				student.setId(rset.getInt("id"));
-			     student.setName(rset.getString("name"));
-			     student.setSex(rset.getString("sex"));
-			     student.setAge(rset.getInt("age"));
-			     student.setClassid(rset.getInt("classid"));
-			     list.add(student);
-		}
-	}catch(Exception e) {
-		e.printStackTrace();
-	}
-	return list;
+		// 成功すれば1が返る
+		return ret;
 	}
 }

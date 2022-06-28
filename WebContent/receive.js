@@ -21,11 +21,13 @@ function register(){
 	}else{
 		
 		var item0 = document.getElementById('productname').selectedIndex;
+		var id = document.getElementById('productname').options[item0].value;
 		var item = document.getElementById('productname').options[item0].innerText;
 		var number = document.getElementById('number').value; 
 		var today = document.getElementById('today').value;
 		var note = document.getElementById('r_note').value;
 		console.log("商品名"+item);
+		console.log("商品ID"+id);
 		console.log(number);
 		console.log(today);
 		console.log(note);
@@ -40,14 +42,14 @@ function register(){
 	    swal(options).then(function(value){
 	        if(value){
 	            //登録するを選んだ場合の処理
-	            coladd(item,number,today,note,item0);
+	            coladd(item,number,today,note,id);
 	        }
 	    });
 	}
 }
 
 //一時登録用リストへの追加
-function coladd(item,number,today,note,item0) {
+function coladd(item,number,today,note,id) {
 	var table = document.getElementById("table");
     var row = table.insertRow(-1);
     
@@ -57,7 +59,7 @@ function coladd(item,number,today,note,item0) {
     var cell4 = row.insertCell(-1);
     var cell5 = row.insertCell(-1);
 
-    cell1.innerHTML = item+'<input type="hidden" name="id" value='+item0+'>';
+    cell1.innerHTML = item+'<input type="hidden" name="id" value='+id+'>';
     cell2.innerHTML = number+'<input type="hidden" name="number" value='+number+'>';
     cell3.innerHTML = today+'<input type="hidden" name="today" value='+today+'>';
     cell4.innerHTML = note+'<input type="hidden" name="note" value='+note+'>';

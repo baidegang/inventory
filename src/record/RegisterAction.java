@@ -21,7 +21,7 @@ public class RegisterAction {
 				// 登録商品の確認コンソール
 				System.out.println("商品ID：" + id[i] + "入庫数："+ number[0]+"入庫日："+ today[i]+"備考："+ note[i]);
 				DbUtil dbutil = new DbUtil();
-				dbutil.insertRecord(id[i]+1,number[i],today[i],note[i]);
+				dbutil.insertRecord(id[i],number[i],today[i],note[i]);
 				i++;
 			}
 			change = "success";

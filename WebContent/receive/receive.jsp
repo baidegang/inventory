@@ -52,11 +52,11 @@
 <script type="text/javascript">
 	function change_name(){
 		var number = document.getElementById("productname").selectedIndex;
+		var id = document.getElementById('productname').options[number].value
 		var inventory = document.getElementById("inventory")
 		var math = document.getElementById("math")
-
 		<s:iterator value="products" var="product" status="key">
-		if(number + 1 == '<s:property value="id"/>'){
+		if(id == '<s:property value="id"/>'){
 			inventory.value = '<s:property value="inventory.quantity"/>';
 			math.innerText = '<s:property value="inventory.quantity"/>';
 		}

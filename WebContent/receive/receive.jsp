@@ -39,8 +39,8 @@
 				<td valign="middle"><meter id="inventory" max=200 value=<s:property value="products[0].inventory.quantity"/>></meter>
 					<p id="math"><s:property value="products[0].inventory.quantity"/></p>
 				</td>
-				<td><input type="number" min="1" id="number"></td>
-				<td><input type="date" name="today" id="today"></td>
+				<td><input type="number" min="1" id="number" onchange="isNumber(this.value)"></td>
+				<td><input type="date" name="today" id="today" onchange="isDate(this.value)"></td>
 				<td><textarea rows="3" cols="20" id=r_note></textarea></td>
 				<td><input type="submit" value="更新" onclick="register()"></td>
 			</tr>
@@ -62,7 +62,7 @@
 		}
 		</s:iterator>
 		<!--  '<s:property value="students[20].name"/>' -->
-		}
+	}
 </script>
 
 

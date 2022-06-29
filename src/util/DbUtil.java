@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,31 +12,18 @@ import java.util.List;
 import entity.Inventory;
 import entity.Product;
 public class DbUtil implements Serializable  {
-	
-	
-	public static Connection getDbConnection() {
+
+	public Connection getDbConnection() {
 		Connection conn = null;
 		try {
 		
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/record?serverTimezone=JST", "root",
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/record?useSSL=false&serverTimezone=JST", "root",
 					"ericbbcn10");
-		//table 4
-//		java <->
-//		
-//		entity class
-//		//class  table
-//			1      1
-//		
-//      Student getStudent(int id)
-//      void    updateStudent(id, age.....)
-//      void    deleteStudent(id)
-//	  void    insertStudent(id,..)
-//	  List<Student> getStudentListByClassId(classid)
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		return conn;
 	}
 	
@@ -43,46 +31,38 @@ public class DbUtil implements Serializable  {
 	
 	public List<Product> getProducts() {
 		List<Product>list = new ArrayList<>();
-		try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select * from product where is_delete = 0");
-		
+		try(Connection conn = getDbConnection();
+		     Statement stmt = conn.createStatement();
+			 ResultSet rset = stmt.executeQuery("select * from product where is_delete = 0")){
+			
 			while(rset.next()) {
 				Product product = new Product();
 				product.setId(rset.getInt("id"));
 				product.setName(rset.getString("name"));
 				product.setInventory(getInventory(rset.getInt("id")));
-//			     student.setClassinfo(getClassinfo(rset.getInt("class_id")));
-//			     if(rset.getString("birthday")==null){
-//			    	 student.setBirthday(Date.valueOf(2022-student.getAge()+"-01"+"-01"));
-//			     }else {
-//			    	 Date date =Date.valueOf(rset.getString("birthday"));
-//			    	 student.setBirthday(date);
-//			     }
-			     list.add(product);
+				list.add(product);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-			
-	}catch(Exception e) {
-		e.printStackTrace();
-	}
 		return list;
 	
 	}
 	
 	public Inventory getInventory(int product_id) {
 		Inventory inventory = null;
-			try {
-				Connection conn = getDbConnection();
+			try(Connection conn = getDbConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rset = stmt.executeQuery("select * from inventory where PRODUCT_ID="+ product_id );		
+				ResultSet rset = stmt.executeQuery("select * from inventory where PRODUCT_ID="+ product_id )){
+				
 				if(rset.next()) {
 					inventory = new Inventory();
 					inventory.setProduct_id(rset.getInt("PRODUCT_ID"));
 					inventory.setQuantity(rset.getInt("QUANTITY"));
 					inventory.setFinal_log(rset.getInt("FINAL_LOG"));
 				}
-			} catch (Exception e) {
+				
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
 			return inventory;
@@ -90,14 +70,12 @@ public class DbUtil implements Serializable  {
 
 	public boolean insertRecord(int product_id,int quantity,String date,String note) {
 		boolean insert = false;
-
-		try {
-
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
-		    // 履歴の追加
+		ResultSet rset = null;
+		
+		try(Connection conn = getDbConnection();
+			Statement stmt = conn.createStatement();){
 			insert = stmt.execute("insert into record(PRODUCT_ID,QUANTITY,DATE,FLAG,NOTE) values("+product_id+","+quantity+",'"+date+"','"+0+"','" + note + "' )");
-		    ResultSet rset = stmt.executeQuery("SELECT LAST_INSERT_ID() AS LAST");
+			rset = stmt.executeQuery("SELECT LAST_INSERT_ID() AS LAST");
 
 		    // 在庫の更新
 		    if(rset != null && rset.next()) {
@@ -105,21 +83,28 @@ public class DbUtil implements Serializable  {
 			    updateInventory(product_id,quantity,last);
 		    }
 		}catch(Exception e) {
-		e.printStackTrace();
+			e.printStackTrace();
+		}finally {
+			if(rset != null) {
+				try {
+					rset.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-			return insert;
+		return insert;
 			
 	}
 	
 	public int updateInventory(int product_id,int quantity,int final_log) {
-		 int ret=0;
-		 try {
-			Connection conn = getDbConnection();
-			Statement stmt = conn.createStatement();
+		int ret=0;
+		try(Connection conn = getDbConnection();
+			Statement stmt = conn.createStatement()){
 			ret= stmt.executeUpdate("UPDATE inventory SET QUANTITY =QUANTITY+"+quantity+",FINAL_LOG="+ final_log +" where PRODUCT_ID="+ product_id );
 		 }catch (Exception e) {
-			 e.printStackTrace();			 
-		}
+			 e.printStackTrace();
+		 }
 		return ret;
 	}	
 	

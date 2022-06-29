@@ -9,8 +9,28 @@ var mm = ("0"+(today.getMonth()+1)).slice(-2);
 var dd = ("0"+today.getDate()).slice(-2);
 document.getElementById("today").value=yyyy+'-'+mm+'-'+dd;
 
+//入庫日：過去の日付のエラーチェック
+function isDate(dateVal){
+	var date = new Date(dateVal)
+	var today = new Date();
+	if(date < today){
+		swal("過去の日付が入力されました" + "\n" + "入力された値：　" + dateVal)
+		document.getElementById("today").value='';
+	}
+}
+//入庫数：自然数以外のエラーチェック
+function isNumber(numVal){
+	
+	var pattern = /^([1-9]\d*|0)$/
+	
+	if(!(pattern.test(numVal))){
+		swal("無効な値が入力されました" + "\n" + "入力された値：　" + numVal);
+		document.getElementById('number').value = 1;		
+	}
 
+}
 
+//更新ボタンの挙動
 function register(){
 	if(document.getElementById('number').value == "" && document.getElementById('today').value == ""){
 		swal("入庫数、入庫日が未入力です");		
@@ -26,12 +46,7 @@ function register(){
 		var number = document.getElementById('number').value; 
 		var today = document.getElementById('today').value;
 		var note = document.getElementById('r_note').value;
-		console.log("商品名"+item);
-		console.log("商品ID"+id);
-		console.log(number);
-		console.log(today);
-		console.log(note);
-		
+
 		var options = {
         text:"商品名："+ item +"  入庫数："+ number +"  入庫日："+ today + "\n"  + "で登録しますか？", //\nでテキストの改行が出来ます
 	        buttons: {

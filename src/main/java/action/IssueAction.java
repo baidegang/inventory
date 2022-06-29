@@ -8,6 +8,7 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import DAO.InventoryDAO;
 import DAO.ProductDAO;
 import entity.Product;
 import model.DataStock;
@@ -20,14 +21,18 @@ public class IssueAction extends ActionSupport implements SessionAware {
 	private int quantity;
 	private int shipMounts;
 	private int index;
+	private int errorFlg;
 	private String name;
 	private String date;
 	private String note;
+	private String message;
 
 	private List<Product> list;
 
+	private DataStock errorData;
 	private List<DataStock> duaList;
 
+	//top
 	public String execute() throws Exception {
 		session.remove("duaList");
 		ProductDAO proDAO = new ProductDAO();
@@ -37,6 +42,7 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
+	//データストック格納メソッド
 	@SuppressWarnings("unchecked")
 	public String preinputData() throws Exception {
 		ProductDAO proDAO = new ProductDAO();
@@ -48,6 +54,7 @@ public class IssueAction extends ActionSupport implements SessionAware {
 			dataStock.setName(name);
 			dataStock.setShipMounts(shipMounts);
 			dataStock.setDate(date);
+			dataStock.setNote(note);
 
 			if (session.isEmpty()) {
 				duaList = new ArrayList<>();
@@ -67,13 +74,14 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		} finally {
-			System.out.println(id + "," + name + "," + shipMounts + "," + date);
 		}
-
 		return "success";
 	}
 
+	
+	//選択項目削除メソッド
+	
+	
 	@SuppressWarnings("unchecked")
 
 	public String delete() {
@@ -94,6 +102,7 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
+//全クリアメソッド
 	public String clear() {
 		ProductDAO proDAO = new ProductDAO();
 		setList(proDAO.selectAll());
@@ -102,11 +111,57 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
+	
+	
+//DB登録メソッド
+	@SuppressWarnings("unchecked")
 	public String submitAll() {
 		ProductDAO proDAO = new ProductDAO();
+		InventoryDAO invDAO = new InventoryDAO();
 		setList(proDAO.selectAll());
 
+		duaList = new ArrayList<>();
+		duaList = (List<DataStock>) session.get("duaList");
+		
+		if (duaList.isEmpty() || duaList == null) {
+			setMessage("error:エラーが発生");
+			return "noQuantity";
+		}
+		
+		int results; 
+		int sults;
+		int errorIndex=0;
+		
+		for (DataStock stock : duaList) {
+			sults = list.get(stock.getId() - 1).getQuantity();
+			list.get(stock.getId()-1).setQuantity(sults - stock.getShipMounts());
+			results = list.get(stock.getId() - 1).getQuantity();
+			System.out.println("getQuantity:" + sults);
+			System.out.println("afterQuantity:" + results);
+			
+			if (results < 0) {
+				errorData = stock;
+				errorFlg = 1;
+				break;
+			}
+			errorIndex++;
+		}
+		
+		if (errorFlg == 1) {
+			setMessage("error:エラーが発生。errorIndex:" + errorIndex);
+			return "noQuantity";
+		}
+		
+			
+		for (DataStock dataStock : duaList) {
+			dataStock.setFlg(2);
+			invDAO.insertRecord(dataStock);
+		}
+			
+		setMessage("success");
+		session.remove("duaList");
 		return "success";
+			
 	}
 
 	public List<Product> getList() {
@@ -185,6 +240,30 @@ public class IssueAction extends ActionSupport implements SessionAware {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public int getErrorFlg() {
+		return errorFlg;
+	}
+
+	public void setErrorFlg(int errorFlg) {
+		this.errorFlg = errorFlg;
+	}
+
+	public DataStock getErrorData() {
+		return errorData;
+	}
+
+	public void setErrorData(DataStock errorData) {
+		this.errorData = errorData;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

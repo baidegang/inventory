@@ -7,12 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/Zaiko/css/style.css">
-<script type="text/javascript" src="/Zaiko/js/main.js"></script>
+<link rel="stylesheet" type="text/css" href="/local/css/style.css">
+<script type="text/javascript" src="/local/js/main.js"></script>
 </head>
 <body>
 	<br>
-	<a href="/Zaiko">TOP</a>
+	<a href="/local">TOP</a>
 	<br>
 	<h2>出庫情報入力</h2>
 
@@ -54,6 +54,7 @@
 				<th>商品</th>
 				<th>出庫数</th>
 				<th>出庫日</th>
+				<th>備考</th>
 				<th>削除</th>
 			</tr>
 			<s:iterator value="#session.duaList" status="stat">
@@ -61,6 +62,7 @@
 					<td><s:property value="name" /></td>
 					<td><s:property value="shipMounts" /></td>
 					<td><s:property value="date" /></td>
+					<td><s:property value="note" /></td>
 					<td>
 					
 					<input type="button" value="削除" onclick="deleteIndex(this)"></td>
@@ -69,9 +71,11 @@
 		</table>
 		<br>
 	</s:form>
-	<s:form id = "submit">
-		<input type="submit" value="出庫" onclick="submit(this)">
-		<input type="submit" value="クリア" onclick="submit(this)">
+	<br>
+	<p><s:property value="message" /></p>
+	<s:form id = "sub">
+		<input type="button" value="出庫" onclick="allAction(this)">
+		<input type="button" value="クリア" onclick="allAction(this)">
 	</s:form>
 
 

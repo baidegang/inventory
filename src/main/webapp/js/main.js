@@ -48,10 +48,10 @@ function deleteIndex(element){
 }
 
 
-function submit(element){
-	var fm = document.getElementById("submit");
-	
-	if(element.value = "出庫"){
+function allAction(element){
+	var fm = document.getElementById("sub");
+	console.log(element.value);
+	if(element.value == "出庫"){
 		fm.action = "submit";
 	}else{
 		fm.action = "clear";
@@ -61,28 +61,4 @@ function submit(element){
 
 
 
-//function rowadd(item,number,today,note,id) {
-//	var table = document.getElementById("table");
-//    var row = table.insertRow(-1);
-//    
-//    var cell1 = row.insertCell(-1);
-//    var cell2 = row.insertCell(-1);
-//    var cell3 = row.insertCell(-1);
-//    var cell4 = row.insertCell(-1);
-//    var cell5 = row.insertCell(-1);
-//
-//    cell1.innerHTML = item+'<input type="hidden" name="id" value='+id+'>';
-//    cell2.innerHTML = number+'<input type="hidden" name="number" value='+number+'>';
-//    cell3.innerHTML = today+'<input type="hidden" name="today" value='+today+'>';
-//    cell4.innerHTML = note+'<input type="hidden" name="note" value='+note+'>';
-//    cell5.innerHTML = '<input type="submit" value="削除" onclick="coldel(this)">';
-// 
-//}
-//
-//function rowdel(obj) {
-//    // 削除ボタンを押下された行を取得
-//	tr = obj.parentNode.parentNode;
-//    // trのインデックスを取得して行を削除する
-//    tr.parentNode.deleteRow(tr.sectionRowIndex);
-//}
-					
+			

@@ -15,7 +15,17 @@
         	
         	</action>
         	
-        	<action name = "inputDataStrock" class = "action.IssueAction" method = "preinputData">
+        	<action name = "inputDataStock" class = "action.IssueAction" method = "preinputData">
+        		<result name="success">/view/issue.jsp</result>
+        	
+        	</action>
+        	
+        	<action name = "delete" class = "action.IssueAction" method = "delete">
+        		<result name="success">/view/issue.jsp</result>
+        		<result name="outOfbounds">/view/issue.jsp</result>
+        	</action>
+        	
+        	<action name = "clear" class = "action.IssueAction" method = "clear">
         		<result name="success">/view/issue.jsp</result>
         	
         	</action>

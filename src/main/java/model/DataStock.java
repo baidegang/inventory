@@ -5,6 +5,9 @@ public class DataStock {
 	private String name;
 	private int shipMounts;
 	private String date;
+	private String note;
+	private int flg;
+	private int log;
 	
 	public int getId() {
 		return id;
@@ -29,6 +32,24 @@ public class DataStock {
 	}
 	public void setDate(String date) {
 		this.date = date;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public int getFlg() {
+		return flg;
+	}
+	public void setFlg(int flg) {
+		this.flg = flg;
+	}
+	public int getLog() {
+		return log;
+	}
+	public void setLog(int log) {
+		this.log = log;
 	}
 	
 }

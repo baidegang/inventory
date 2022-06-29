@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Inventory;
+import model.DataStock;
 
 public class InventoryDAO {
 
@@ -86,7 +87,73 @@ public class InventoryDAO {
 		return inv;
 	}
 	
+	//recordテーブル挿入
+	public void insertRecord(DataStock dataStock) {
+		try {
+			this.getConnection();
+			
+			pstmt = con.prepareStatement("INSERT INTO record(PRODUCT_ID,QUANTITY,DATE,FLAG,NOTE) "
+					+ "VALUES(?,?,?,?,?);");
+			
+			pstmt.setInt(1, dataStock.getId());
+			pstmt.setInt(2, dataStock.getShipMounts());
+			pstmt.setString(3, dataStock.getDate());
+			pstmt.setInt(4, dataStock.getFlg());
+			pstmt.setString(5, dataStock.getNote());
+			
+			
+			pstmt.executeUpdate();
+			
+
+			pstmt = con.prepareStatement("SELECT last_insert_id() AS LAST;");
+			rs = pstmt.executeQuery();
+			if(rs != null && rs.next()) {
+			     dataStock.setLog(rs.getInt("LAST"));
+		    }
+			
+			updateInventory(dataStock);
+			
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			this.close();
+		}
+	}
 	
+	
+	//inventory更新
+	public void updateInventory(DataStock dataStock) {
+		try {
+			this.getConnection();
+			
+			pstmt = con.prepareStatement("UPDATE inventory SET "
+					+ "QUANTITY = QUANTITY - ?,"
+					+ "FINAL_LOG = ? "
+					+ "WHERE PRODUCT_ID = ?;");
+			
+			pstmt.setInt(1, dataStock.getShipMounts());
+			pstmt.setInt(2, dataStock.getLog());
+			pstmt.setInt(3, dataStock.getId());
+			
+			
+			pstmt.executeUpdate();
+			
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			this.close();
+		}
+	}
 	
 	
 	

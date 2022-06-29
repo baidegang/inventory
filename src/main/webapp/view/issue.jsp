@@ -12,7 +12,7 @@
 </head>
 <body>
 	<br>
-	<a href="">TOP</a>
+	<a href="/Zaiko">TOP</a>
 	<br>
 	<h2>出庫情報入力</h2>
 
@@ -27,15 +27,15 @@
 				<th>更新</th>
 			</tr>
 			<tr>
-				<td><s:select list="list" listValue="name" listKey="id"
-						defaultvalue="0" id="id" name="id" onchange="inputChange()">
+				<td><s:select list="list" listValue="name" listKey="id" id="id"
+						name="id" onchange="inputChange()">
 					</s:select> <input type="hidden" name="name"></td>
 				<td><s:select list="list" listValue="quantity" listKey="id"
 						id="quantity" name="quantity" disabled="true"></s:select></td>
 				<td><input id="number" name="shipMounts" type="number" min="0"
 					value="10"></td>
-				<td><input type="date" name="date"></td>
-				<td><textarea></textarea></td>
+				<td><input type="date" name="date" id="date"></td>
+				<td><textarea name = "note"></textarea></td>
 				<td><input type="button" value="更新" onclick="updateData()"></td>
 			</tr>
 		</table>
@@ -46,42 +46,33 @@
 	<br>
 	<br>
 	<br>
-	<form action="">
+	<s:form action="delete" id="delete">
+		<s:hidden name="index"/>
 		<table class="stockdata">
+			<s:hidden id = "hidden"></s:hidden>
 			<tr>
 				<th>商品</th>
 				<th>出庫数</th>
 				<th>出庫日</th>
+				<th>削除</th>
 			</tr>
-			<s:iterator value="duaList">
+			<s:iterator value="#session.duaList" status="stat">
 				<tr>
 					<td><s:property value="name" /></td>
-					<td><s:property value="shipMount" /></td>
+					<td><s:property value="shipMounts" /></td>
 					<td><s:property value="date" /></td>
+					<td>
+					
+					<input type="button" value="削除" onclick="deleteIndex(this)"></td>
 				</tr>
 			</s:iterator>
 		</table>
-		<br> <input type="submit" value="出庫">
-	</form>
-
-
-	<table border="1">
-		<tr>
-			<th>id</th>
-			<th>name</th>
-			<th>quantity</th>
-			<th>user</th>
-
-		</tr>
-		<s:iterator value="list">
-			<tr>
-				<td><s:property value="id" /></td>
-				<td><s:property value="name" /></td>
-				<td><s:property value="quantity" /></td>
-				<td><s:property value="lastuser" /></td>
-			</tr>
-		</s:iterator>
-	</table>
+		<br>
+	</s:form>
+	<s:form id = "submit">
+		<input type="submit" value="出庫" onclick="submit(this)">
+		<input type="submit" value="クリア" onclick="submit(this)">
+	</s:form>
 
 
 </body>

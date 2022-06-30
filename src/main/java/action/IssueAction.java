@@ -32,7 +32,7 @@ public class IssueAction extends ActionSupport implements SessionAware {
 	private DataStock errorData;
 	private List<DataStock> duaList;
 
-	//top
+	// top
 	public String execute() throws Exception {
 		session.remove("duaList");
 		ProductDAO proDAO = new ProductDAO();
@@ -42,7 +42,7 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
-	//データストック格納メソッド
+	// データストック格納メソッド
 	@SuppressWarnings("unchecked")
 	public String preinputData() throws Exception {
 		ProductDAO proDAO = new ProductDAO();
@@ -78,10 +78,8 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
-	
-	//選択項目削除メソッド
-	
-	
+	// 選択項目削除メソッド
+
 	@SuppressWarnings("unchecked")
 
 	public String delete() {
@@ -111,8 +109,6 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		return "success";
 	}
 
-	
-	
 //DB登録メソッド
 	@SuppressWarnings("unchecked")
 	public String submitAll() {
@@ -122,23 +118,23 @@ public class IssueAction extends ActionSupport implements SessionAware {
 
 		duaList = new ArrayList<>();
 		duaList = (List<DataStock>) session.get("duaList");
-		
-		if (duaList.isEmpty() || duaList == null) {
-			setMessage("error:エラーが発生");
+
+		if (duaList == null) {
+			setMessage("error:項目がありません");
 			return "noQuantity";
 		}
-		
-		int results; 
+
+		int results;
 		int sults;
-		int errorIndex=0;
-		
+		int errorIndex = 0;
+
 		for (DataStock stock : duaList) {
 			sults = list.get(stock.getId() - 1).getQuantity();
-			list.get(stock.getId()-1).setQuantity(sults - stock.getShipMounts());
+			list.get(stock.getId() - 1).setQuantity(sults - stock.getShipMounts());
 			results = list.get(stock.getId() - 1).getQuantity();
 			System.out.println("getQuantity:" + sults);
 			System.out.println("afterQuantity:" + results);
-			
+
 			if (results < 0) {
 				errorData = stock;
 				errorFlg = 1;
@@ -146,22 +142,21 @@ public class IssueAction extends ActionSupport implements SessionAware {
 			}
 			errorIndex++;
 		}
-		
+
 		if (errorFlg == 1) {
 			setMessage("error:エラーが発生。errorIndex:" + errorIndex);
 			return "noQuantity";
 		}
-		
-			
+
 		for (DataStock dataStock : duaList) {
 			dataStock.setFlg(2);
 			invDAO.insertRecord(dataStock);
 		}
-			
+
 		setMessage("success");
 		session.remove("duaList");
 		return "success";
-			
+
 	}
 
 	public List<Product> getList() {

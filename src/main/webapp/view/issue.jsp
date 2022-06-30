@@ -28,14 +28,14 @@
 			</tr>
 			<tr>
 				<td><s:select list="list" listValue="name" listKey="id" id="id"
-						name="id" onchange="inputChange()">
+						name="id" value="1" onchange="inputChange()">
 					</s:select> <input type="hidden" name="name"></td>
 				<td><s:select list="list" listValue="quantity" listKey="id"
 						id="quantity" name="quantity" disabled="true"></s:select></td>
 				<td><input id="number" name="shipMounts" type="number" min="0"
 					value="10"></td>
 				<td><input type="date" name="date" id="date"></td>
-				<td><textarea name = "note"></textarea></td>
+				<td><textarea name="note"></textarea></td>
 				<td><input type="button" value="更新" onclick="updateData()"></td>
 			</tr>
 		</table>
@@ -47,9 +47,9 @@
 	<br>
 	<br>
 	<s:form action="delete" id="delete">
-		<s:hidden name="index"/>
+		<s:hidden name="index" />
 		<table class="stockdata">
-			<s:hidden id = "hidden"></s:hidden>
+			<s:hidden id="hidden"></s:hidden>
 			<tr>
 				<th>商品</th>
 				<th>出庫数</th>
@@ -63,17 +63,18 @@
 					<td><s:property value="shipMounts" /></td>
 					<td><s:property value="date" /></td>
 					<td><s:property value="note" /></td>
-					<td>
-					
-					<input type="button" value="削除" onclick="deleteIndex(this)"></td>
+					<td><input type="button" value="削除"
+						onclick="deleteIndex(this)"></td>
 				</tr>
 			</s:iterator>
 		</table>
 		<br>
 	</s:form>
 	<br>
-	<p><s:property value="message" /></p>
-	<s:form id = "sub">
+	<p style="color: red;">
+		<s:property value="message" />
+	</p>
+	<s:form id="sub">
 		<input type="button" value="出庫" onclick="allAction(this)">
 		<input type="button" value="クリア" onclick="allAction(this)">
 	</s:form>

@@ -67,7 +67,7 @@ function register(){
 	        switch(value){
 	            case "ok"://登録するを選んだ場合の処理
 	            	coladd(item,number,today,note,id);
-				case "cancel":
+				case null:
 					//入庫数、入庫日、備考の初期化
 					var date = new Date();
 					date.setDate(date.getDate());

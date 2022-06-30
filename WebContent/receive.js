@@ -20,14 +20,20 @@ function isDate(dateVal){
 }
 //入庫数：自然数以外のエラーチェック
 function isNumber(numVal){
-	
 	var pattern = /^([1-9]\d*|0)$/
-	
 	if(!(pattern.test(numVal))){
 		swal("無効な値が入力されました" + "\n" + "入力された値：　" + numVal);
 		document.getElementById('number').value = 1;		
 	}
-
+}
+//備考：文字数制限のエラーチェック
+function isNote(noteVal){
+	var text = document.getElementById('note_tag');
+	if(255-noteVal.length < 0){
+		swal("入力可能文字数を超えました");
+		document.getElementById('r_note').value = noteVal.substr(0,255);
+	}
+	text.innerText = 255-noteVal.length;
 }
 
 //更新ボタンの挙動

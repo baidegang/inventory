@@ -30,7 +30,7 @@
 				<th>在庫数</th>			
 				<th>入庫数</th>
 				<th>入庫日</th>
-				<th>備考</th>
+				<th>備考 <font size="1">あと<span id="note_tag">255</span>文字入力可</font></th>
 			</tr>
 			<tr style="text-align:center">
 				<td><form name="submit">
@@ -41,7 +41,7 @@
 				</td>
 				<td><input type="number" min="1" id="number" onchange="isNumber(this.value)"></td>
 				<td><input type="date" name="today" id="today" onchange="isDate(this.value)"></td>
-				<td><textarea rows="3" cols="20" id=r_note></textarea></td>
+				<td><textarea rows="3" cols="20" id=r_note oninput="isNote(this.value)"></textarea></td>
 				<td><input type="submit" value="更新" onclick="register()"></td>
 			</tr>
 		</table>

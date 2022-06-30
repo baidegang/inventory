@@ -61,7 +61,17 @@
 			math.innerText = '<s:property value="inventory.quantity"/>';
 		}
 		</s:iterator>
-		<!--  '<s:property value="students[20].name"/>' -->
+
+		//入庫数、入庫日、備考の初期化
+		var date = new Date();
+		date.setDate(date.getDate());
+		var yyyy = date.getFullYear();
+		var mm = ("0"+(date.getMonth()+1)).slice(-2);
+		var dd = ("0"+date.getDate()).slice(-2);
+		document.getElementById("today").value=yyyy+'-'+mm+'-'+dd;
+		document.getElementById('number').value = "";
+		document.getElementById('r_note').value = "";
+		document.getElementById('note_tag').innerText = 255;
 	}
 </script>
 

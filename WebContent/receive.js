@@ -2,6 +2,7 @@
  * 
  */
  
+//今日の日付
 var today = new Date();
 today.setDate(today.getDate());
 var yyyy = today.getFullYear();
@@ -16,6 +17,7 @@ function isDate(dateVal){
 	if(date < today){
 		swal("過去の日付が入力されました" + "\n" + "入力された値：　" + dateVal)
 		document.getElementById("today").value='';
+		console.log(today);
 	}
 }
 //入庫数：自然数以外のエラーチェック
@@ -29,11 +31,12 @@ function isNumber(numVal){
 //備考：文字数制限のエラーチェック
 function isNote(noteVal){
 	var text = document.getElementById('note_tag');
+	var note = document.getElementById('r_note')
 	if(255-noteVal.length < 0){
 		swal("入力可能文字数を超えました");
-		document.getElementById('r_note').value = noteVal.substr(0,255);
+		note.value = noteVal.substr(0,255);
 	}
-	text.innerText = 255-noteVal.length;
+	text.innerText = 255-note.value.length;
 }
 
 //更新ボタンの挙動
@@ -61,10 +64,20 @@ function register(){
 	        }
 	    };
 	    swal(options).then(function(value){
-	        if(value){
-	            //登録するを選んだ場合の処理
-	            coladd(item,number,today,note,id);
-	        }
+	        switch(value){
+	            case "ok"://登録するを選んだ場合の処理
+	            	coladd(item,number,today,note,id);
+				case "cancel":
+					//入庫数、入庫日、備考の初期化
+					var date = new Date();
+					date.setDate(date.getDate());
+					var yyyy = date.getFullYear();
+					var mm = ("0"+(date.getMonth()+1)).slice(-2);
+					var dd = ("0"+date.getDate()).slice(-2);
+					document.getElementById("today").value=yyyy+'-'+mm+'-'+dd;
+					document.getElementById('number').value = "";
+					document.getElementById('r_note').value = "";
+			}
 	    });
 	}
 }

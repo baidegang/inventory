@@ -50,6 +50,8 @@ public class IssueAction extends ActionSupport implements SessionAware {
 		setList(proDAO.selectAll());
 
 		try {
+			System.out.println(1);
+			
 			dataStock.setId(id);
 			dataStock.setName(name);
 			dataStock.setShipMounts(shipMounts);
